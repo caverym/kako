@@ -1,0 +1,15 @@
+[package]
+name = "kako"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.11.0", features = ["full"] }
+futures = "0.3.17"
+twilight-cache-inmemory = "0.6.1"
+twilight-gateway = "0.6.2"
+twilight-http = "0.6.3"
+twilight-model = "0.6.2"
+jargon-args = "0.2.2"
