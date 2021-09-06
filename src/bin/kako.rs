@@ -7,18 +7,19 @@ use twilight_model::gateway::payload::{MessageCreate, Ready};
 use twilight_model::id::UserId;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> ! {
+    use std::io::{Stderr, stderr, Write};
+    let mut errp: Stderr = stderr();
+
     loop {
         if let Err(e) = kako_main().await {
+            #[allow(unused_must_use)]
             match e.to_string().as_str() {
                 "restart" => continue,
-                "exit" => break,
-                a => {
-                    eprintln!("{}", a);
-                    std::process::exit(1)
-                }
-            }
-        }
+                "exit" => std::process::exit(0),
+                a => errp.write_fmt(format_args!("{}\n", a)),
+            };
+        };
     }
 }
 
@@ -54,9 +55,16 @@ async fn matcher(kako: &mut Bot, event: Event) -> Result<(), Er> {
 }
 
 fn on_ready(kako: &mut Bot, ready: Box<Ready>) -> Result<(), Er> {
+    use std::io::{Stdout, stdout, Write};
+    let mut outp: Stdout = stdout();
+
     kako.set_name(ready.user.name);
-    println!("{} ready!", kako);
+
+    #[allow(unused_must_use)]
+    outp.write_fmt(format_args!("{} ready!\n", kako));
+
     Ok(())
+
 }
 
 async fn commands(kako: &mut Bot, message: Box<MessageCreate>) -> Result<(), Er> {
@@ -67,7 +75,7 @@ async fn commands(kako: &mut Bot, message: Box<MessageCreate>) -> Result<(), Er>
     }
 
     if message.author.id == UserId(687492720356491400) {
-        kako.create_message(message.channel_id, "oh god why")
+        kako.create_message(message.channel_id, "shut up")
             .await?;
     }
 
